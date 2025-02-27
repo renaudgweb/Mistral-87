@@ -48,9 +48,16 @@ def chat():
 
 		response = client.chat.complete(
 			messages=[
-				{"role": "system", "content": "Tu es un assistant serviable."},
-				{"role": "user", "content": user_input}
-			],
+	            {
+	                "role": "system",
+	                "content": (
+	                    "Tu es un assistant serviable. Retourne un résumé structuré en HTML "
+	                    "(avec si besoin <h3>, <h4>, <ul>, <li>, <p>). N'utilise pas de blocs "
+	                    "(```html)."
+	                ),
+	            },
+	            {"role": "user", "content": prompt},
+	        ],
 			model=model,
 			temperature=temperature,
 			frequency_penalty=frequency,
