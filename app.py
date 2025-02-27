@@ -24,7 +24,7 @@ app = Flask(__name__)
 def chat():
 
 	# Initialiser le client Mistral avec votre clé API
-    client = Mistral(api_key=api_key)
+	client = Mistral(api_key=api_key)
 
 	with open('config.json') as config_file:
 		config = json.load(config_file)
@@ -53,8 +53,8 @@ def chat():
 			],
 			model=model,
 			temperature=temperature,
-            frequency_penalty=frequency,
-            presence_penalty=presence
+			frequency_penalty=frequency,
+			presence_penalty=presence
 		)
 
 		prompt = response.usage.prompt_tokens
@@ -73,27 +73,27 @@ def chat():
 
 @app.route('/update_json', methods=['POST'])
 def update_json():
-    # Récupérer les valeurs des curseurs
-    model = request.form['model']
-    temperature = float(request.form['temperature'])
-    frequency_penalty = float(request.form['frequencyPenalty'])
-    presence_penalty = float(request.form['presencePenalty'])
+	# Récupérer les valeurs des curseurs
+	model = request.form['model']
+	temperature = float(request.form['temperature'])
+	frequency_penalty = float(request.form['frequencyPenalty'])
+	presence_penalty = float(request.form['presencePenalty'])
 
-    # Créer un dictionnaire avec les nouvelles valeurs
-    data = {
-        'model': model,
-        'temperature': temperature,
-        'frequency_penalty': frequency_penalty,
-        'presence_penalty': presence_penalty
-    }
+	# Créer un dictionnaire avec les nouvelles valeurs
+	data = {
+		'model': model,
+		'temperature': temperature,
+		'frequency_penalty': frequency_penalty,
+		'presence_penalty': presence_penalty
+	}
 
-    # Écrire le dictionnaire dans le fichier JSON
-    with open('config.json', 'w') as file:
-        json.dump(data, file)
+	# Écrire le dictionnaire dans le fichier JSON
+	with open('config.json', 'w') as file:
+		json.dump(data, file)
 
-    # Répondre avec une confirmation
-    response = {'status': 'success', 'message': 'Fichier JSON mis à jour avec succès'}
-    return jsonify(response)
+	# Répondre avec une confirmation
+	response = {'status': 'success', 'message': 'Fichier JSON mis à jour avec succès'}
+	return jsonify(response)
 
 
 if __name__ == '__main__':
