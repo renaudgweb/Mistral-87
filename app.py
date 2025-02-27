@@ -26,7 +26,7 @@ def chat():
 	# Initialiser le client Mistral avec votre clé API
 	client = Mistral(api_key=api_key)
 
-	with open('config.json') as config_file:
+	with open(os.path.join(project_folder, 'config.json')) as config_file:
 		config = json.load(config_file)
 
 	model = config['model']
