@@ -178,7 +178,7 @@ presence_penalty determines how much the model penalizes the repetition of words
                           let completionTokens = response.completion;
                           let totalTokens = response.total;
                           let price = tokensPrice(promptTokens, completionTokens);
-                          document.getElementById('total').textContent = '> Tokens: '+totalTokens+' ('+price+'$)';
+                          document.getElementById('total').textContent = '> Tokens: '+totalTokens+' ('+price+'€)';
                           stopCounter();
                           document.getElementById('submit-button').disabled = false;
                           typeWriterEffect(response.messages);
