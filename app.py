@@ -48,7 +48,7 @@ def chat():
 
 		response = client.chat.complete(
 			messages=[
-				{"role": "system", "content": "You are a helpful assistant."},
+				{"role": "system", "content": "Tu es un assistant serviable."},
 				{"role": "user", "content": user_input}
 			],
 			model=model,
