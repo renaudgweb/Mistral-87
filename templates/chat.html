@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, shrink-to-fit=no"/>
+    <meta name="theme-color" content="#001400" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#001400" media="(prefers-color-scheme: dark)">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}"/>
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+    <link rel="stylesheet" href="static/css/styles.css"/>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+
+	<title>Mistral-87</title>
+</head>
+<body class="body-green">
+    <audio controls preload="auto">
+        <source src="static/sounds/blip.mp3" type="audio/mpeg">
+        <source src="static/sounds/click.mp3" type="audio/mpeg">
+        <source src="static/sounds/computer-processing.mp3" type="audio/mpeg">
+    </audio>
+    <form id="configForm" method="post">
+        <div class="conf conf-select">
+            <select name="model" id="model" class="model-green">
+                <option value="gpt-3.5-turbo" selected="yes">gpt-3.5-turbo</option>
+                <option value="gpt-3.5-turbo-instruct">gpt-3.5-turbo-instruct</option>
+                <option value="gpt-4-turbo-preview">gpt-4-turbo</option>
+                <option value="gpt-4">gpt-4</option>
+            </select>
+            <label for="model"><span class="infoBulle" title="gpt-3.5-turbo: Most capable GPT-3.5 model and optimized for chat at 1/10th the cost of text-davinci-003. Will be updated with our latest model iteration.
+Max Tokens: 4,096 tokens.
+Training Data: Up to Sep 2021
+Modèle GPT-3.5 le plus performant et optimisé pour les conversations à 1/10e du coût de text-davinci-003. Sera mis à jour avec notre dernière itération de modèle.
+Nombre maximal de jetons : 4 096 jetons.
+Données d'entraînement : Jusqu'en septembre 2021
+
+gpt-3.5-turbo-16k: Same capabilities as the standard gpt-3.5-turbo model but with 4 times the context.
+Max Tokens: 16,384 tokens.
+Training Data: Up to Sep 2021
+Mêmes capacités que le modèle standard gpt-3.5-turbo mais avec 4 fois plus de contexte.
+Nombre maximum de tokens : 16 384 tokens.
+Données d'entraînement : jusqu'en septembre 2021
+
+gpt-4: More capable than any GPT-3.5 model, able to do more complex tasks, and optimized for chat. Will be updated with our latest model iteration.
+Max Tokens: 8,192 tokens.
+Training Data: Up to Sep 2021
+(Not available now)
+Plus performant que tout modèle GPT-3.5, capable d'effectuer des tâches plus complexes et optimisé pour les conversations. Sera mis à jour avec notre dernière itération de modèle.
+Nombre maximal de jetons : 8 192 jetons.
+Données d'entraînement : Jusqu'en septembre 2021
+
+gpt-4-32k: Same capabilities as the standard gpt-4 model but with 4 times the context.
+Max Tokens: 32,768 tokens.
+Training Data: Up to Sep 2021
+Mêmes capacités que le modèle standard gpt-4 mais avec 4 fois plus de contexte.
+Nombre maximum de tokens : 32,768 tokens.
+Données d'entraînement : jusqu'en septembre 2021
+
+https://platform.openai.com/docs/models/gpt-4">Modele: </span></label>
+            <output class="model-output" for="model">{{ model }}</output>
+        </div>
+        <div class="conf">
+            <label for="temperature"><span class="infoBulle" title="Temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
+
+Température : quelle température d'échantillonnage utiliser, entre 0 et 2. Des valeurs plus élevées comme 0,8 rendront la sortie plus aléatoire, tandis que des valeurs plus basses comme 0,2 la rendront plus ciblée et déterministe.">Temperature: </span></label>
+            <input class="input-conf" type="range" name="temperature" id="temperature" min="0" max="2" step="0.01" value="{{ temperature }}">
+            <output class="temperature-output" for="temperature">{{ temperature }}</output>
+        </div>
+        <div class="conf">
+            <label for="frequencyPenalty"><span class="infoBulle" title="Frequency_penalty: Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim.
+
+Frequency_penalty : Nombre compris entre -2.0 et 2.0. Les valeurs positives pénalisent les nouveaux jetons en fonction de leur fréquence existante dans le texte jusqu'à présent, réduisant ainsi la probabilité du modèle de répéter exactement la même phrase.">FrequenceP: </span></label>
+            <input class="input-conf" type="range" name="frequencyPenalty" id="frequencyPenalty" min="-2" max="2" step="0.01" value="{{ frequency }}">
+            <output class="frequencyPenalty-output" for="frequencyPenalty">{{ frequency }}</output>
+        </div>
+        <div class="conf">
+            <label for="presencePenalty"><span class="infoBulle" title="Presence_penalty: Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.
+
+Presence_penalty : Nombre compris entre -2.0 et 2.0. Les valeurs positives pénalisent les nouveaux jetons en fonction de leur présence dans le texte jusqu'à présent, augmentant ainsi la probabilité du modèle de parler de nouveaux sujets.">PresenceP: </span></label>
+            <input class="input-conf" type="range" name="presencePenalty" id="presencePenalty" min="-2" max="2" step="0.01" value="{{ presence }}">
+            <output class="presencePenalty-output" for="presencePenalty">{{ presence }}</output>
+        </div>
+    </form>
+    <div id="terminal" class="term-green">
+        <p class="version">v2.1.7</p>
+        <h1>GPT-87</h1>
+    	<pre>
+ /$$      /$$ /$$             /$$                        /$$ /$$ /$$$$$$  /$$$$$$$$
+| $$$    /$$$|__/            | $$                       | $$| $//$$__  $$|_____ $$/
+| $$$$  /$$$$ /$$  /$$$$$$$ /$$$$$$    /$$$$$$  /$$$$$$ | $$|_/| $$  \ $$     /$$/ 
+| $$ $$/$$ $$| $$ /$$_____/|_  $$_/   /$$__  $$|____  $$| $$   |  $$$$$$/    /$$/  
+| $$  $$$| $$| $$|  $$$$$$   | $$    | $$  \__/ /$$$$$$$| $$    >$$__  $$   /$$/   
+| $$\  $ | $$| $$ \____  $$  | $$ /$$| $$      /$$__  $$| $$   | $$  \ $$  /$$/    
+| $$ \/  | $$| $$ /$$$$$$$/  |  $$$$/| $$     |  $$$$$$$| $$   |  $$$$$$/ /$$/     
+|__/     |__/|__/|_______/    \___/  |__/      \_______/|__/    \______/ |__/      
+        </pre>
+        <pre>
+*****************************************************************
+        </pre>
+        <div class="infos">
+            <p id="timer" class="timer">> Timer: 0s</p>
+            <p id="date" class="date">> Thu Jan 1 00:00:00 CEST 1970</p>
+            <p id="total" class="total">> Tokens: 0 (0$)</p>
+        </div>
+        <p class="typed-message">{{ ip }}@Mistral-87:~$ <span class="cursor">▋</span></p>
+    </div>
+
+    <form id="chat-form" method="POST">
+        <input id="Input" class="input-green" type="text" name="user_input" placeholder="Prompt..." required>
+        <button id="submit-button" class="button-green" onclick="playClick()" type="submit">Submit</button>
+    </form>
+
+    <script src="static/js/script.js"></script>
+    <script>
+
+        const form = document.getElementById('configForm');
+        const modelSelect = document.getElementById('model');
+        const tempInput = document.getElementById('temperature');
+        const freqInput = document.getElementById('frequencyPenalty');
+        const presInput = document.getElementById('presencePenalty');
+
+        tempInput.addEventListener('input', () => {
+            const temperature = tempInput.value;
+            const tempOutput = document.querySelector('.temperature-output');
+            tempOutput.textContent = temperature;
+        });
+        freqInput.addEventListener('input', () => {
+            const frequency = freqInput.value;
+            const freqOutput = document.querySelector('.frequencyPenalty-output');
+            freqOutput.textContent = frequency;
+        });
+        presInput.addEventListener('input', () => {
+            const presence = presInput.value;
+            const presOutput = document.querySelector('.presencePenalty-output');
+            presOutput.textContent = presence;
+        });
+
+        // Fonction pour mettre à jour le fichier JSON
+        function updateJSON() {
+            const formData = new FormData(form);
+            fetch('http://localhost:5000/update_json', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.status);
+                console.log(data.message);
+            })
+            .catch(error => console.error(error));
+        }
+        // Écouter les changements dans les curseurs et appeler la fonction de mise à jour
+        form.addEventListener('change', updateJSON);
+
+        // Variable pour Fn JS TypeWriter
+        let ip = '{{ ip }}';
+        let model = '{{ model }}';
+
+        let counter = 0;
+        let intervalId;
+
+        function startCounter() {
+          intervalId = setInterval(() => {
+            counter++;
+            document.getElementById('timer').textContent = '> Timer: '+counter+'s';
+          }, 1000);
+        }
+
+        function stopCounter() {
+          clearInterval(intervalId);
+          counter = 0;
+        }
+
+        $(function() {
+            $('#chat-form').submit(function(event) {
+                event.preventDefault();
+
+                let form = $(this);
+                let url = form.attr('action');
+                let method = form.attr('method');
+                let data = form.serialize();
+
+                document.getElementById('submit-button').disabled = true;
+                startCounter();
+                $('#timer').show();
+
+                if (data !== 'user_input=') {
+                    $.ajax({
+                        url: url,
+                        type: method,
+                        data: data,
+                        success: function(response) {
+                          let created = response.created;
+                          document.getElementById('date').textContent = '> '+created;
+                          let promptTokens = response.prompt;
+                          let completionTokens = response.completion;
+                          let totalTokens = response.total;
+                          let price = tokensPrice(promptTokens, completionTokens);
+                          document.getElementById('total').textContent = '> Tokens: '+totalTokens+' ('+price+'$)';
+                          stopCounter();
+                          document.getElementById('submit-button').disabled = false;
+                          typeWriterEffect(response.messages);
+                          form[0].reset();
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            console.log('Error:', errorThrown);
+                            stopCounter();
+                            document.getElementById('submit-button').disabled = false;
+                            alert('Error');
+                            form[0].reset();
+                        }
+                    });
+                    return false;
+                } else {
+                    alert('Prompt empty');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
