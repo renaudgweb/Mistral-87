@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from dotenv import load_dotenv
+from pathlib import Path
 from flask import Flask, request, render_template, jsonify
 import json
 import os
@@ -8,13 +10,21 @@ import sys
 import time
 from mistralai import Mistral
 
+# Charger les variables d'environnement depuis un fichier .env
+project_folder = os.path.expanduser('~/Mistral-87')
+load_dotenv(os.path.join(project_folder, '.env'))
+
+# Accéder à la clé API depuis le fichier .env
+api_key = os.getenv("API_KEY")
+
 app = Flask(__name__)
 
 
 @app.route('/', methods=['GET', 'POST'])
 def chat():
 
-	openai.api_key = "API-KEY-HERE"
+	# Initialiser le client Mistral avec votre clé API
+    client = Mistral(api_key=api_key)
 
 	with open('config.json') as config_file:
 		config = json.load(config_file)
@@ -36,7 +46,7 @@ def chat():
 		user_input = request.form['user_input']
 		messages.append({'sender': 'YOU', 'content': user_input})
 
-		response = openai.ChatCompletion.create(
+		response = client.chat.complete(
 			messages=[
 				{"role": "system", "content": "You are a helpful assistant."},
 				{"role": "user", "content": user_input}

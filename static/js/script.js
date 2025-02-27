@@ -41,28 +41,20 @@ function tokensPrice(input_tokens, output_tokens) {
   let tokenIn = 0;
   let tokenOut = 0;
   switch (model) {
-    case 'gpt-4-turbo-preview':
-      tokenIn = 0.01;
-      tokenOut = 0.03;
+    case 'mistral-small-latest':
+      tokenIn = 0.18 / 1_000_000; // 0.18€ par million de tokens
+      tokenOut = 0.60 / 1_000_000; // 0.60€ par million de tokens
       break;
-    case 'gpt-4':
-      tokenIn = 0.03;
-      tokenOut = 0.06;
-      break;
-    case 'gpt-3.5-turbo':
-      tokenIn = 0.0005;
-      tokenOut = 0.0015;
-      break;
-    case 'gpt-3.5-turbo-instruct':
-      tokenIn = 0.0015;
-      tokenOut = 0.0020;
+    case 'mistral-large-latest':
+      tokenIn = 2.00 / 1_000_000; // 2.00$ par million de tokens
+      tokenOut = 6.00 / 1_000_000; // 6.00$ par million de tokens
       break;
     default:
       tokenIn = 0;
       tokenOut = 0;
       break;
   }
-  const totalUSD = (input_tokens * tokenIn + output_tokens * tokenOut) / 1000;
+  const totalUSD = (input_tokens * tokenIn + output_tokens * tokenOut);
   return totalUSD.toFixed(8);
 }
 

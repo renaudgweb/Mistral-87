@@ -8,85 +8,64 @@
     <meta name="theme-color" content="#001400" media="(prefers-color-scheme: dark)">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}"/>
-    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
-    <link rel="stylesheet" href="static/css/styles.css"/>
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='img/favicon.ico') }}"/>
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 
 	<title>Mistral-87</title>
 </head>
 <body class="body-green">
     <audio controls preload="auto">
-        <source src="static/sounds/blip.mp3" type="audio/mpeg">
-        <source src="static/sounds/click.mp3" type="audio/mpeg">
-        <source src="static/sounds/computer-processing.mp3" type="audio/mpeg">
+        <source src="{{ url_for('static', filename='sounds/blip.mp3') }}" type="audio/mpeg">
+        <source src="{{ url_for('static', filename='sounds/click.mp3') }}" type="audio/mpeg">
+        <source src="{{ url_for('static', filename='sounds/computer-processing.mp3') }}" type="audio/mpeg">
     </audio>
     <form id="configForm" method="post">
         <div class="conf conf-select">
             <select name="model" id="model" class="model-green">
-                <option value="gpt-3.5-turbo" selected="yes">gpt-3.5-turbo</option>
-                <option value="gpt-3.5-turbo-instruct">gpt-3.5-turbo-instruct</option>
-                <option value="gpt-4-turbo-preview">gpt-4-turbo</option>
-                <option value="gpt-4">gpt-4</option>
+                <option value="mistral-small-latest" selected="yes">mistral-small-latest</option>
+                <option value="mistral-large-latest">mistral-large-latest</option>
             </select>
-            <label for="model"><span class="infoBulle" title="gpt-3.5-turbo: Most capable GPT-3.5 model and optimized for chat at 1/10th the cost of text-davinci-003. Will be updated with our latest model iteration.
-Max Tokens: 4,096 tokens.
-Training Data: Up to Sep 2021
-Modèle GPT-3.5 le plus performant et optimisé pour les conversations à 1/10e du coût de text-davinci-003. Sera mis à jour avec notre dernière itération de modèle.
-Nombre maximal de jetons : 4 096 jetons.
-Données d'entraînement : Jusqu'en septembre 2021
+            <label for="model"><span class="infoBulle" title="Mistral Small: Intermediate tasks that require language transformation
+Mistral Small is the ideal for intermediate tasks that require moderate reasoning - like Data extraction, Summarizing a Document, Writing a Job Description, or Writing Product Descriptions. Mistral Small strikes a balance between performance and capability, making it suitable for a wide range of tasks that only require language transformaion. For example, Mistral Small can write an email.
 
-gpt-3.5-turbo-16k: Same capabilities as the standard gpt-3.5-turbo model but with 4 times the context.
-Max Tokens: 16,384 tokens.
-Training Data: Up to Sep 2021
-Mêmes capacités que le modèle standard gpt-3.5-turbo mais avec 4 fois plus de contexte.
-Nombre maximum de tokens : 16 384 tokens.
-Données d'entraînement : jusqu'en septembre 2021
+Mistral Large: Complex tasks that require large reasoning capabilities or are highly specialized
 
-gpt-4: More capable than any GPT-3.5 model, able to do more complex tasks, and optimized for chat. Will be updated with our latest model iteration.
-Max Tokens: 8,192 tokens.
-Training Data: Up to Sep 2021
-(Not available now)
-Plus performant que tout modèle GPT-3.5, capable d'effectuer des tâches plus complexes et optimisé pour les conversations. Sera mis à jour avec notre dernière itération de modèle.
-Nombre maximal de jetons : 8 192 jetons.
-Données d'entraînement : Jusqu'en septembre 2021
+Mistral Large is ideal for complex tasks that require large reasoning capabilities or are highly specialized - like Synthetic Text Generation, Code Generation, RAG, or Agents.
 
-gpt-4-32k: Same capabilities as the standard gpt-4 model but with 4 times the context.
-Max Tokens: 32,768 tokens.
-Training Data: Up to Sep 2021
-Mêmes capacités que le modèle standard gpt-4 mais avec 4 fois plus de contexte.
-Nombre maximum de tokens : 32,768 tokens.
-Données d'entraînement : jusqu'en septembre 2021
+    Complex reasoning
 
-https://platform.openai.com/docs/models/gpt-4">Modele: </span></label>
+Mistral Large outperforms our other four models in commonsense and reasoning benchmarks, making it the best choice for complex reasoning tasks.
+
+In this example, we ask Mistral Large to calculate the difference in payment dates between the two customers whose payment amounts are closest to each other in the given dataset. Mistral Large can easily and automatically break down the problem into smaller steps: identify the two closest payment amounts, find their respective payment dates, and calculate the date difference. Mistral Large is an excellent choice for tasks that require complex reasoning and problem-solving skills.">Modele: </span></label>
             <output class="model-output" for="model">{{ model }}</output>
         </div>
         <div class="conf">
-            <label for="temperature"><span class="infoBulle" title="Temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
-
-Température : quelle température d'échantillonnage utiliser, entre 0 et 2. Des valeurs plus élevées comme 0,8 rendront la sortie plus aléatoire, tandis que des valeurs plus basses comme 0,2 la rendront plus ciblée et déterministe.">Temperature: </span></label>
-            <input class="input-conf" type="range" name="temperature" id="temperature" min="0" max="2" step="0.01" value="{{ temperature }}">
+            <label for="temperature"><span class="infoBulle" title="What sampling temperature to use, we recommend between 0.0 and 0.7. Higher values like 0.7 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. We generally recommend altering this or top_p but not both. The default value varies depending on the model you are targeting. Call the /models endpoint to retrieve the appropriate value.
+">Temperature: </span></label>
+            <input class="input-conf" type="range" name="temperature" id="temperature" min="0" max="0.7" step="0.01" value="{{ temperature }}">
             <output class="temperature-output" for="temperature">{{ temperature }}</output>
         </div>
         <div class="conf">
-            <label for="frequencyPenalty"><span class="infoBulle" title="Frequency_penalty: Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim.
-
-Frequency_penalty : Nombre compris entre -2.0 et 2.0. Les valeurs positives pénalisent les nouveaux jetons en fonction de leur fréquence existante dans le texte jusqu'à présent, réduisant ainsi la probabilité du modèle de répéter exactement la même phrase.">FrequenceP: </span></label>
+            <label for="frequencyPenalty"><span class="infoBulle" title="Default: 0
+frequency_penalty penalizes the repetition of words based on their frequency in the generated text. A higher frequency penalty discourages the model from repeating words that have already appeared frequently in the output, promoting diversity and reducing repetition.
+">FrequenceP: </span></label>
             <input class="input-conf" type="range" name="frequencyPenalty" id="frequencyPenalty" min="-2" max="2" step="0.01" value="{{ frequency }}">
             <output class="frequencyPenalty-output" for="frequencyPenalty">{{ frequency }}</output>
         </div>
         <div class="conf">
-            <label for="presencePenalty"><span class="infoBulle" title="Presence_penalty: Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.
-
-Presence_penalty : Nombre compris entre -2.0 et 2.0. Les valeurs positives pénalisent les nouveaux jetons en fonction de leur présence dans le texte jusqu'à présent, augmentant ainsi la probabilité du modèle de parler de nouveaux sujets.">PresenceP: </span></label>
+            <label for="presencePenalty"><span class="infoBulle" title="Default: 0
+presence_penalty determines how much the model penalizes the repetition of words or phrases. A higher presence penalty encourages the model to use a wider variety of words and phrases, making the output more diverse and creative.
+">PresenceP: </span></label>
             <input class="input-conf" type="range" name="presencePenalty" id="presencePenalty" min="-2" max="2" step="0.01" value="{{ presence }}">
             <output class="presencePenalty-output" for="presencePenalty">{{ presence }}</output>
         </div>
     </form>
     <div id="terminal" class="term-green">
         <p class="version">v2.1.7</p>
-        <h1>GPT-87</h1>
+        <h1>Mistral-87</h1>
     	<pre>
  /$$      /$$ /$$             /$$                        /$$ /$$ /$$$$$$  /$$$$$$$$
 | $$$    /$$$|__/            | $$                       | $$| $//$$__  $$|_____ $$/
@@ -113,7 +92,7 @@ Presence_penalty : Nombre compris entre -2.0 et 2.0. Les valeurs positives péna
         <button id="submit-button" class="button-green" onclick="playClick()" type="submit">Submit</button>
     </form>
 
-    <script src="static/js/script.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script>
 
         const form = document.getElementById('configForm');
@@ -141,7 +120,7 @@ Presence_penalty : Nombre compris entre -2.0 et 2.0. Les valeurs positives péna
         // Fonction pour mettre à jour le fichier JSON
         function updateJSON() {
             const formData = new FormData(form);
-            fetch('http://localhost:5000/update_json', {
+            fetch('/update_json', {
                 method: 'POST',
                 body: formData
             })
